@@ -1,0 +1,160 @@
+PROGRAMME morpion
+
+ //BUT:Jouer au morpion	
+ //ENTREE:Case choisi
+ //SORTIE:Gagne ou non et indique quel joueur gagne une manche
+
+CONST
+	NBRMANCHEMAX <-3 //On initialise le nombre maximum de manches qu'il peut y avoir.
+
+Type Tgrille = tableau [1..3,1..3]de ENTIER //On initialise le tableau ou le joueur pourra jouer
+
+PROCEDURE init_jeu:BOOLEEN
+
+ //BUT:Initialiser les différents joueurs
+ //ENTREE:Nom des différents joueurs
+ //SORTIE:Nom des différenst joueurs
+
+VAR
+	pseudoJ1,pseudoJ2:CHAINE
+	compteur:ENTIER
+
+DEBUT
+
+	ECRIRE ("Vous aller jouer au jeu du morpion")
+	ECRIRE("Votre but est d''aligner 3 chSIfres verticalement, horizontalement ou en diagonale afin de gagner")
+	ECRIRE("Le jeu se déroule en ',NBRMANCHE,'manches .")
+	ECRIRE("Premier joueur, veuillez entrer votre pseudo")
+	LIRE(pseudoJ1) // On lit le nom du joueur1
+	ECRIRE("Deuxième joueur, veuillez entrer votre pseudo")
+	LIRE(pseudoJ2) // On lit le nom du joueur2
+			FINSI
+			SI choix<-VRAI ALORS
+					ECRIRE("le joueur qui commence la partie est : ",pseudoJ1)
+					ECRIRE("Vous controlez les O")
+			SINON	ECRIRE("le joueur qui commence la partie est : ",pseudoJ2)
+					ECRIRE("Vous controlez les X")
+			FINSI
+	
+FIN
+
+PROCEDURE initialisation ( var grille : Tgrille )
+ //BUT:Initialiser le tableau
+ //ENTREE:L'utilisateur ne rentre rien
+ //SORTIE:Tableau avec le symbole "-"afin de pouvoir jouer
+
+VAR
+	i,j:ENTIER
+	fin:BOOLEEN
+
+DEBUT
+	fin<-FAUX
+	ECRIRE("Manche ",compteur_manche)
+     POUR i=1 A 3 FAIRE
+     	POUR j=1 A 3 FAIRE
+     		grille[i,j]:="-"
+     FINPOUR
+	FINPOUR
+     SI manches_gagnantes =partie entière(NBRMANCHEMAX/2+1)ALORS 
+		fin<-VRAI
+	FINSI
+FIN
+
+FONCTION deplacement(var pseudoJ1,pseudoJ2:CHAINE,grille : Tgrille)
+
+VAR
+	i,j:ENTIER
+
+DEBUT  
+	ECRIRE(pseudoJ1,"veuillez ecrire votre coordonnee en ligne (de 1 a 3)")
+	LIRE(i)
+	ECRIRE(pseudoJ1,"veuillez ecrire votre coordonnee en colonne (de 1 a 3)")
+	LIRE(j)
+		SI i >=1 and i <=3 ALORS //Si le nombre entree en ligne se situe dans le tableau alors le programme continue
+			SI j >=1 and j <=3 ALORS //Si le nombre entree en ligne se situe dans le tableau alors le programme continue
+				TANT QUE grille[i,j]<>'-' ALORS //On précise que la case doit contenir le symbole "-" et donc qu'il n'appartient à aucun joueur
+					DEBUT
+						ECRIRE("Veuillez ecrire votre coordonnee en ligne (de 1 a 3)")
+						LIRE(i) //On lit la coordonnée en x
+						ECRIRE("Veuillez ecrire votre coordonnee en colonne (de 1 a 3)")
+						LIRE(j)	//On lit la coordonnée en x
+					FIN
+					grille[i,j]<-"O" //On assigne les coordonnées en x et y dans le tableau et on demande au programme de remplacer le "-" par "O"
+				FINTANTQUE
+			FINSI
+		FINSI
+	ECRIRE(pseudoJ2,"veuillez ecrire votre coordonnee en ligne (de 1 a 3)")
+	LIRE(i)
+	ECRIRE(pseudoJ2,"veuillez ecrire votre coordonnee en colonne (de 1 a 3)")
+	LIRE(j)
+		SI i >=1 and i <=3 ALORS //Si le nombre entree en ligne se situe dans le tableau alors le programme continue
+			SI j >=1 and j <=3 ALORS //Si le nombre entree en ligne se situe dans le tableau alors le programme continue
+				TANT QUE grille[i,j]<>'-' ALORS //On précise que la case doit contenir le symbole "-" et donc qu'il n'appartient à aucun joueur
+					DEBUT
+						ECRIRE("Veuillez ecrire votre coordonnee en ligne (de 1 a 3)")
+						LIRE(i) //On lit la coordonnée en x
+						ECRIRE("Veuillez ecrire votre coordonnee en colonne (de 1 a 3)")
+						LIRE(j)
+					FIN
+					grille[i,j]<-"X" //On assigne les coordonnées en x et y dans le tableau et on demande au programme de remplacer le "-" par "X"
+				FINTANTQUE
+			FINSI
+		FINSI	
+FIN
+	
+FONCTION gagne_perd(grille : Tgrille)
+ //BUT:Comparer les différentes cases
+ //ENTREE:Lettres des différents joueurs
+ //SORTIE:Indique quel joueur gagne ou indique si aucun des deux joueurs n'a gagné
+
+VAR
+	manche_gagnantesJ1:ENTIER
+	manche_gagnantesJ2:ENTIER
+
+DEBUT
+	SI grille[1,1]="O" and grille[2,1]="O" and grille[3,1]="O" //On compare si trois "O" sont alignés (verticale,horizontale,diagonale)
+	OU grille[1,2]="O" and grille[2,2]="O" and grille[3,2]="O"
+	OU grille[1,3]="O" and grille[2,3]="O" and grille[3,3]="O"
+	OU grille[1,1]="O" and grille[2,2]="O" and grille[3,3]="O"
+	OU grille[3,1]="O" and grille[2,2]="O" and grille[1,3]="O" 
+	FINSI
+	ALORS
+		ECRIRE('Vous avez gagné la manche,'pseudoJ1) //Si le joueur a trois de ses symboles qui sont alignés, alors le jeu augmente son nombre de manches gagnées	
+		manche_gagnantesJ1<-manche_gagnantesJ1+1
+	SI grille[1,1]="X" and grille[2,1]="X" and grille[3,1]="X" //On compare si trois "X" sont alignés (verticale,horizontale,diagonale)
+	OU grille[1,2]="X" and grille[2,2]="X" and grille[3,2]="X"
+	OU grille[1,3]="X" and grille[2,3]="X" and grille[3,3]="X"
+	OU grille[1,1]="X" and grille[2,2]="X" and grille[3,3]="X"
+	OU grille[3,1]="X" and grille[2,2]="X" and grille[1,3]="X"
+	FINSI
+	ALORS
+			ECRIRE('Vous avez gagné la manche,'pseudoJ2) //Si le joueur a trois de ses symboles qui sont alignés, alors le jeu augmente son nombre de manches gagnées
+			manche_gagnantesJ2<-manche_gagnantesJ2+1
+	SI grille[1,1]<>"-" and grille[2,1]<>"-" and grille[3,1]<>"-" and grille[1,2]<>"-" and grille[2,2]<>"-" and grille[3,2]<>"-" and grille[1,3]<>"-" and grille[2,3]<>"-" and grille[3,3]<>"-"
+	ECRIRE ("Aucun joueur n'a gagné")
+	FINSI
+FIN
+
+FONCTION manche(manche_gagnantesJ1,manche_gagnantesJ2:ENTIER,pseudoJ1,pseudoJ2:CHAINE)
+ //BUT: Indiquer quel joueur à gagner la partie
+ //ENTREE: Nombre de manches gagnées de chaque joueur
+ //SORTIE: Joueur gagnant
+DEBUT
+
+	SI manche_gagnantesJ1=trunc(NBRMANCHE/2+1)ALORS //On part du principe que dès qu'un jouer atteint plus de la moitié du nombre de manches alors le jeu s'arrête car l'autre joueur ne peut plus gagner
+			ECRIRE(pseudoJ1,"a gagné la partie, bien joué à lui")
+	FINSI
+	SI manche_gagnantesJ2=trunc(NBRMANCHE/2+1)ALORS //On part du principe que dès qu'un jouer atteint plus de la moitié du nombre de manches alors le jeu s'arrête car l'autre joueur ne peut plus gagner
+			ECRIRE(pseudoJ2,"a gagné la partie, bien joué à lui")
+	FINSI
+FIN
+
+ //Programme pricipal
+
+DEBUT
+	init_jeu
+	init_tab
+	deplacement
+	gagne_perd
+	manche
+FIN.
